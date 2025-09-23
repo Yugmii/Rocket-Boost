@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,12 +9,15 @@ public class Movement : MonoBehaviour
     [SerializeField] InputAction rotation;
     [SerializeField] float rotationStrength = 100f;
 
-    
+    AudioSource audioSource;
+
+
     Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void OnEnable()
@@ -27,6 +31,7 @@ public class Movement : MonoBehaviour
     {
         processThrust();
         processRotation();
+        
     }
 
 
@@ -35,6 +40,14 @@ public class Movement : MonoBehaviour
         if (thrust.IsPressed())
         {
             rb.AddRelativeForce(Vector3.up * thrustStrength * Time.fixedDeltaTime);
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            audioSource.Stop();
         }
     }
     private void processRotation()
@@ -60,4 +73,8 @@ public class Movement : MonoBehaviour
         transform.Rotate(Vector3.forward * RotationThisFrame * Time.fixedDeltaTime);
         rb.freezeRotation = false;
     }
+
+   
 }
+
+//from audacity we can create our own sound.
